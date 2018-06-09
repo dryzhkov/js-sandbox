@@ -2,21 +2,24 @@ import { WebWorker } from './webWorker';
 let webWorkerInProgress: boolean = false;
 let nextValue: string;
 
-export default function autocomplete(element: HTMLElement | null, data: any) {
+export default function autocomplete(element: HTMLElement | null) {
   if (!element) {
     return;
   }
 
-  element.addEventListener("input", () => {
-    const value = (element as any).value as string;
+  WebWorker.init()
+    .then(() => {
+      element.addEventListener("input", () => {
+        const value = (element as any).value as string;
 
-    if (value.trim() === '') {
-      hideAutoCompleteUI();
-    } else if (!webWorkerInProgress){
-      getSuggestions(element, value);
-    } else {
-      nextValue = value;
-    }
+        if (value.trim() === '') {
+          hideAutoCompleteUI();
+        } else if (!webWorkerInProgress){
+          getSuggestions(element, value);
+        } else {
+          nextValue = value;
+        }
+      });
   });
 }
 
@@ -25,7 +28,7 @@ function getSuggestions(element: HTMLElement, text: string) {
   WebWorker.postMessage(text)
     .then(msgEvent => {
       webWorkerInProgress = false;
-      displaySuggestions(element, [msgEvent.data], text);
+      displaySuggestions(element, msgEvent.data, text);
 
       if (nextValue) {
         getSuggestions(element, nextValue);

@@ -6,17 +6,17 @@ import logo from './logo.svg';
 
 class App extends React.Component {
   public componentDidMount() {
-    autocomplete(document.getElementById('textInput'), []);
+    autocomplete(document.getElementById('textInput'));
   }
   public render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcom to AutoComplete Demo</h1>
+          <h1 className="App-title">Welcome to AutoComplete Demo</h1>
         </header>
         <div className="AutoComplete" >
-          <input type="text" id="textInput" autoComplete="off" placeholder="enter the search term" />
+          <input type="text" id="textInput" autoComplete="off" placeholder="start typing..." />
         </div>
       </div>
     );
