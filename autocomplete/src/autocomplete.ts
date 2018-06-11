@@ -42,6 +42,7 @@ function getSuggestions(element: HTMLElement, text: string) {
 }
 
 function displaySuggestions(element: HTMLElement, suggestions: any[], original: string) {
+  hideAutoCompleteUI();
   const div = document.createElement('div');
   div.setAttribute('id', `${element.id}-autocomplete-list`);
   div.setAttribute('class', 'autocomplete-items');
