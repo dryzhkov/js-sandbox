@@ -4,15 +4,16 @@ function getSuggestions(value) {
   if (value === '') {
     return [];
   }
+  value = value.toLowerCase();
   var suggestions = [];
   var startingEl = traverseUntilEndOf(value);
   if (startingEl) {
-    search(value, startingEl, suggestions, 10);
+    searchBFS(value, startingEl, suggestions, 10);
   }
   postMessage(suggestions);
 }
 
-function search(value, curEl, suggestions, limit) {
+function searchDFS(value, curEl, suggestions, limit) {
   if (suggestions.length === limit) {
     return;
   } else if (curEl.isWord) {
@@ -21,7 +22,31 @@ function search(value, curEl, suggestions, limit) {
 
   for (var el of curEl.words) {
     if (el) {
-      search(value + el.char, el, suggestions, limit);
+      searchDFS(value + el.char, el, suggestions, limit);
+    }
+  }
+}
+
+function searchBFS(value, startEl, suggestions, limit) {
+  var queue = [];
+  queue.push({
+    element: startEl,
+    word: value
+  });
+
+  while (queue.length && suggestions.length < limit) {
+    var w = queue.shift();
+    if (w.element.isWord) {
+      suggestions.push(w.word);
+    }
+
+    for (var child of w.element.words) {
+      if (child) {
+        queue.push({
+          element: child,
+          word: w.word + child.char
+        });
+      }
     }
   }
 }
@@ -47,7 +72,7 @@ function initWords(words) {
   var curWordList = wordTrie;
   for (var word of words) {
     for (var i = 0; i < word.length; i++) {
-      var c = word[i];
+      var c = word[i].toLowerCase();
       var cIndex = atoi(c);
       if (curWordList[cIndex] === undefined) {
         var wordEl = {
