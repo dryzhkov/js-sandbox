@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 var wordTrie = [];
 function getSuggestions(value) {
-  if (value === '') {
+  if (value === "") {
     return [];
   }
   value = value.toLowerCase();
@@ -31,7 +31,7 @@ function searchBFS(value, startEl, suggestions, limit) {
   var queue = [];
   queue.push({
     element: startEl,
-    word: value
+    word: value,
   });
 
   while (queue.length && suggestions.length < limit) {
@@ -44,7 +44,7 @@ function searchBFS(value, startEl, suggestions, limit) {
       if (child) {
         queue.push({
           element: child,
-          word: w.word + child.char
+          word: w.word + child.char,
         });
       }
     }
@@ -77,8 +77,8 @@ function initWords(words) {
       if (curWordList[cIndex] === undefined) {
         var wordEl = {
           char: c,
+          isWord: i === (word.length - 1),
           words: [],
-          isWord: i === (word.length - 1)
         };
 
         curWordList[cIndex] = wordEl;
@@ -92,12 +92,12 @@ function initWords(words) {
   }
 }
 
-onmessage = function (e) {
+onmessage = function(e) {
   var msg = e.data;
 
-  if (msg.type === 'init_data') {
+  if (msg.type === "init_data") {
     initWords(msg.payload);
-  } else if (msg.type === 'find_suggestion') {
+  } else if (msg.type === "find_suggestion") {
     getSuggestions(msg.payload);
   }
 };
@@ -105,4 +105,3 @@ onmessage = function (e) {
 function atoi(c) {
   return c.charCodeAt() - 48; // 48 is ASCII for "0"
 }
-

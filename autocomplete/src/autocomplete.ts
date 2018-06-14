@@ -47,13 +47,15 @@ function displaySuggestions(element: HTMLElement, suggestions: any[], original: 
   div.setAttribute('id', `${element.id}-autocomplete-list`);
   div.setAttribute('class', 'autocomplete-items');
 
-  element.parentNode && element.parentNode.appendChild(div);
+  if (element.parentNode) {
+    element.parentNode.appendChild(div);
+  }
 
-  for (let i = 0; i < suggestions.length; i++) {
+  for (const suggestion of suggestions) {
     const b = document.createElement("DIV");
-    b.innerHTML = "<strong>" + suggestions[i].substr(0, original.length) + "</strong>";
-    b.innerHTML += suggestions[i].substr(original.length);
-    b.innerHTML += "<input type='hidden' value='" + suggestions[i] + "'>";
+    b.innerHTML = "<strong>" + suggestion.substr(0, original.length) + "</strong>";
+    b.innerHTML += suggestion.substr(original.length);
+    b.innerHTML += "<input type='hidden' value='" + suggestion + "'>";
     b.addEventListener("click", function(e) {
       (element as any).value = this.getElementsByTagName("input")[0].value;
       hideAutoCompleteUI();
@@ -65,7 +67,7 @@ function displaySuggestions(element: HTMLElement, suggestions: any[], original: 
 function hideAutoCompleteUI() {
   const lists = document.getElementsByClassName('autocomplete-items');
   for (let i = lists.length - 1; i >= 0; i--) {
-    let listEl = lists[i];
+    const listEl = lists[i];
     if (listEl && listEl.parentNode) {
       listEl.parentNode.removeChild(listEl);
     }

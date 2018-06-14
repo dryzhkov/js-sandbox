@@ -26,6 +26,7 @@
   width: 300px;
   position: relative;
   display: inline-block;
+  margin-top: 1em;
 }
 
 @keyframes App-logo-spin {
